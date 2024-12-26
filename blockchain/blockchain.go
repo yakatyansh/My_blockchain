@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"time"
+
+	"github.com/boltdb/bolt"
 )
 
 type Block struct {
@@ -58,6 +60,15 @@ func replaceChain(newBlocks []Block) {
 	if len(newBlocks) > len(Blockchain) {
 		Blockchain = newBlocks
 	}
+}
+
+func initDB() {
+	db, err := bolt.Open("my.db", 0600, nil)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
+
 }
 
 func main() {
