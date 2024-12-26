@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/boltdb/bolt"
@@ -15,6 +16,7 @@ type Block struct {
 	Data      string
 	PrevHash  string
 	Hash      string
+	Nonce     int
 }
 
 var Blockchain []Block
@@ -62,6 +64,13 @@ func replaceChain(newBlocks []Block) {
 	}
 }
 
+func ProofOfWork(block *Block) {
+	for !strings.HasPrefix(block.Hash, "0000") {
+		block.Nonce++
+		block.Hash = calculateHash(*block)
+	}
+}
+
 func initDB() (*bolt.DB, error) {
 	db, err := bolt.Open("my.db", 0600, nil)
 	if err != nil {
@@ -72,7 +81,7 @@ func initDB() (*bolt.DB, error) {
 
 func main() {
 	t := time.Now()
-	genesisBlock := Block{0, t.String(), "Genesis Block", "", ""}
+	genesisBlock := Block{0, t.String(), "Genesis Block", "", "", 0}
 	fmt.Println(genesisBlock)
 	Blockchain = append(Blockchain, genesisBlock)
 }
