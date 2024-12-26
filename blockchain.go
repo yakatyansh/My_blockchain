@@ -7,5 +7,3 @@ type Block struct {
 	PrevHash  string
 	Hash      string
 }
-
-var Blockchain []Block
