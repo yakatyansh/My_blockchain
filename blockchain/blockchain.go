@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-
-	"github.com/boltdb/bolt"
 )
 
 type Block struct {
@@ -69,19 +67,4 @@ func ProofOfWork(block *Block) {
 		block.Nonce++
 		block.Hash = calculateHash(*block)
 	}
-}
-
-func initDB() (*bolt.DB, error) {
-	db, err := bolt.Open("my.db", 0600, nil)
-	if err != nil {
-		return nil, err
-	}
-	return db, nil
-}
-
-func main() {
-	t := time.Now()
-	genesisBlock := Block{0, t.String(), "Genesis Block", "", "", 0}
-	fmt.Println(genesisBlock)
-	Blockchain = append(Blockchain, genesisBlock)
 }
