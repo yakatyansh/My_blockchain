@@ -3,8 +3,7 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
-	"strings"
+	"strconv"
 )
 
 type Block struct {
@@ -17,18 +16,23 @@ type Block struct {
 	Difficulty int
 }
 
-var Blockchain []Block
-
-func calculateHash(block Block) string {
-	record := fmt.Sprintf("%d%s%s%s", block.Index, block.Timestamp, block.Data, block.PrevHash)
-	h := sha256.New()
-	h.Write([]byte(record))
-	return hex.EncodeToString(h.Sum(nil))
+func (b *Block) CalculateHash() string {
+	data := strconv.Itoa(b.Index) + b.Timestamp + b.Data + b.PrevHash + strconv.Itoa(b.Nonce)
+	hash := sha256.Sum256([]byte(data))
+	return hex.EncodeToString(hash[:])
 }
 
-func ProofOfWork(block *Block) {
-	for !strings.HasPrefix(block.Hash, "0000") {
-		block.Nonce++
-		block.Hash = calculateHash(*block)
+func (b *Block) MineBlock() {
+	target := ""
+	for i := 0; i < b.Difficulty; i++ {
+		target += "0"
+	}
+
+	for {
+		b.Hash = b.CalculateHash()
+		if b.Hash[:b.Difficulty] == target {
+			break
+		}
+		b.Nonce++
 	}
 }
