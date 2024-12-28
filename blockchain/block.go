@@ -7,13 +7,14 @@ import (
 )
 
 type Block struct {
-	Index      int
-	Timestamp  string
-	Data       string
-	PrevHash   string
-	Hash       string
-	Nonce      int
-	Difficulty int
+	Index        int
+	Timestamp    string
+	Data         string
+	PrevHash     string
+	Hash         string
+	Nonce        int
+	Difficulty   int
+	Transactions []transaction
 }
 
 func (b *Block) CalculateHash() string {

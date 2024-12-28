@@ -3,8 +3,9 @@ package main
 import "time"
 
 type Blockchain struct {
-	Chain      []Block
-	Difficulty int
+	Chain           []Block
+	Difficulty      int
+	TransactionPool []transaction
 }
 
 func NewBlockchain() *Blockchain {
@@ -35,4 +36,14 @@ func (bc *Blockchain) AddBlock(data string) {
 	}
 	newBlock.MineBlock()
 	bc.Chain = append(bc.Chain, newBlock)
+}
+
+func (bc *Blockchain) CreateTransaction(sender, receiver string, amount float64, signature string) {
+	Transaction := transaction{
+		Sender:    sender,
+		Receiver:  receiver,
+		Amount:    amount,
+		Signature: signature,
+	}
+	bc.TransactionPool = append(bc.TransactionPool, transaction)
 }
