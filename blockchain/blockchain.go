@@ -39,7 +39,7 @@ func (bc *Blockchain) AddBlock(data string) {
 }
 
 func (bc *Blockchain) CreateTransaction(sender, receiver string, amount float64, signature string) {
-	Transaction := transaction{
+	transaction := transaction{
 		Sender:    sender,
 		Receiver:  receiver,
 		Amount:    amount,
