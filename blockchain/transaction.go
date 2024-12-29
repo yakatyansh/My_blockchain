@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-type transaction struct {
+type Transaction struct {
 	Sender    string  // Public key of the sender
 	Receiver  string  // Public key of the receiver
 	Amount    float64 // Amount being transferred
@@ -17,14 +17,14 @@ type transaction struct {
 }
 
 // Sign a transaction using the sender's private key
-func (t *transaction) Sign(privateKey *ecdsa.PrivateKey) {
+func (t *Transaction) Sign(privateKey *ecdsa.PrivateKey) {
 	hash := sha256.Sum256([]byte(t.Sender + t.Receiver + strconv.FormatFloat(t.Amount, 'f', 6, 64)))
 	r, s, _ := ecdsa.Sign(rand.Reader, privateKey, hash[:])
 	t.Signature = hex.EncodeToString(r.Bytes()) + hex.EncodeToString(s.Bytes())
 }
 
 // Validate a transaction by verifying its signature and ensuring sufficient balance
-func ValidateTransaction(transaction transaction, publicKey *ecdsa.PublicKey) bool {
+func ValidateTransaction(transaction Transaction, publicKey *ecdsa.PublicKey) bool {
 	// Verify signature
 	hash := sha256.Sum256([]byte(transaction.Sender + transaction.Receiver + strconv.FormatFloat(transaction.Amount, 'f', 6, 64)))
 	r, s := big.Int{}, big.Int{}

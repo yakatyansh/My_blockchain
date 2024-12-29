@@ -14,7 +14,7 @@ type Block struct {
 	Hash         string
 	Nonce        int
 	Difficulty   int
-	Transactions []transaction
+	Transactions []Transaction
 }
 
 func (b *Block) CalculateHash() string {

@@ -1,9 +1,19 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 )
 
 func main() {
-	fmt.Println("Hello, Blockchain!")
+	// Initialize blockchain
+	blockchain := NewBlockchain()
+
+	// Set up routes
+	SetupRoutes(blockchain)
+
+	// Start the server
+	port := ":8080"
+	log.Printf("Server running on http://localhost%s\n", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }

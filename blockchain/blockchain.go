@@ -5,7 +5,7 @@ import "time"
 type Blockchain struct {
 	Chain           []Block
 	Difficulty      int
-	TransactionPool []transaction
+	TransactionPool []Transaction
 }
 
 func NewBlockchain() *Blockchain {
@@ -39,7 +39,7 @@ func (bc *Blockchain) AddBlock(data string) {
 }
 
 func (bc *Blockchain) CreateTransaction(sender, receiver string, amount float64, signature string) {
-	transaction := transaction{
+	transaction := Transaction{
 		Sender:    sender,
 		Receiver:  receiver,
 		Amount:    amount,
