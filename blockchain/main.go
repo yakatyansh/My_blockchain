@@ -8,6 +8,7 @@ import (
 func main() {
 	// Initialize blockchain
 	blockchain := NewBlockchain()
+	TransactionPool = []Transaction{}
 
 	// Set up routes
 	SetupRoutes(blockchain)
