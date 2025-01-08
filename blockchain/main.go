@@ -5,6 +5,10 @@ import (
 	"net/http"
 )
 
+var (
+	TransactionPool []Transaction
+)
+
 func main() {
 	// Initialize blockchain
 	blockchain := NewBlockchain()
