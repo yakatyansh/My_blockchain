@@ -44,11 +44,10 @@ func InitializeBlockChain() {
 }
 
 func IsBlockValid(newBlock, oldBlock Block) bool {
-	if oldBlock.Index+1 != newBlock.Index
-	{
+	if oldBlock.Index+1 != newBlock.Index {
 		return false
 	}
-	if oldBlock.Hash != newBlock.PreviousHash {
+	if oldBlock.Hash != newBlock.PrevHash {
 		return false
 	}
 	if CalculateHash(newBlock) != newBlock.Hash {
