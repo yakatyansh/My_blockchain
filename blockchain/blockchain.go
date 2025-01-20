@@ -28,3 +28,32 @@ func GenerateBlock(previousBlock Block, voterID string, candidate string) Block 
 	newBlock.Hash = CalculateHash(newBlock)
 	return newBlock
 }
+
+func InitializeBlockChain() {
+	genesisBlock := Block{
+		Index:     0,
+		Timestamp: time.Now().String(),
+		VoterID:   "Genesis",
+		Candidate: "None",
+		PrevHash:  "0",
+	}
+
+	genesisBlock.Hash = CalculateHash(genesisBlock)
+	Blockchain = append(Blockchain, genesisBlock)
+
+}
+
+func IsBlockValid(newBlock, oldBlock Block) bool {
+	if oldBlock.Index+1 != newBlock.Index
+	{
+		return false
+	}
+	if oldBlock.Hash != newBlock.PreviousHash {
+		return false
+	}
+	if CalculateHash(newBlock) != newBlock.Hash {
+		return false
+	}
+	return true
+
+}

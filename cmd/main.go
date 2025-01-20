@@ -1,8 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"blockchain-voting/api"
+	"blockchain-voting/blockchain"
+	"fmt"
+	"log"
+	"net/http"
+)
 
 func main() {
-	fmt.Printf("Blockchain voting system")
+	// Initialize the blockchain with the genesis block
+	blockchain.InitializeBlockChain()
 
+	// Setup the API routes
+	api.SetupRoutes()
+
+	// Start the server
+	fmt.Println("Starting server on port 8080...")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
 }
