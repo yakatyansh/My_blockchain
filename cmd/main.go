@@ -13,7 +13,7 @@ func main() {
 	blockchain.InitializeBlockChain()
 
 	// Setup the API routes
-	api.SetupRoutes()
+	api.SetupRoutes(mux)
 
 	// Start the server
 	fmt.Println("Starting server on port 8080...")

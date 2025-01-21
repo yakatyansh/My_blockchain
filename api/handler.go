@@ -1,54 +1,67 @@
 package api
 
 import (
-	"blockchain-voting/blockchain"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
-// VoteRequest represents the structure of the vote request sent from the frontend
-type VoteRequest struct {
-	VoterID   string `json:"voterID"`
-	Candidate string `json:"candidate"`
+// CORS middleware to handle cross-origin requests
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")          // Allowed methods
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allowed headers
+
+		// Handle preflight (OPTIONS) requests
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		// Call the next handler
+		next.ServeHTTP(w, r)
+	})
 }
 
-// VoteResponse represents the structure of the response sent back to the frontend
-type VoteResponse struct {
-	Message    string             `json:"message"`
-	Blockchain []blockchain.Block `json:"blockchain"`
-}
-
-// VoteHandler handles the vote submission
+// Handler to process voting requests
 func VoteHandler(w http.ResponseWriter, r *http.Request) {
-	// Ensure the request is a POST request
+	// Ensure the method is POST
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Parse the incoming JSON request
-	var voteRequest VoteRequest
-	err := json.NewDecoder(r.Body).Decode(&voteRequest)
+	// Parse the JSON body
+	var vote struct {
+		VoterID   string `json:"voterID"`
+		Candidate string `json:"candidate"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&vote)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	previousBlock := blockchain.Blockchain[len(blockchain.Blockchain)-1]
-	newBlock := blockchain.GenerateBlock(previousBlock, voteRequest.VoterID, voteRequest.Candidate)
+	// Log the vote to the console
+	fmt.Printf("Received vote: %+v\n", vote)
 
-	if blockchain.IsBlockValid(newBlock, previousBlock) {
-		blockchain.Blockchain = append(blockchain.Blockchain, newBlock)
+	// Respond with a success message
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Vote successfully recorded!",
+	})
+}
 
-		// Send a success response back to the frontend
-		response := VoteResponse{
-			Message:    "Vote successfully recorded!",
-			Blockchain: blockchain.Blockchain,
-		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-	} else {
-		// Send an error response if the block is invalid
-		http.Error(w, "Invalid block, vote not recorded", http.StatusInternalServerError)
-	}
+func main() {
+	// Create a new ServeMux
+	mux := http.NewServeMux()
+	mux.Handle("/vote", http.HandlerFunc(VoteHandler))
+
+	// Wrap the mux with the CORS middleware
+	fmt.Println("Starting server on http://localhost:8080")
+	http.ListenAndServe(":8080", enableCORS(mux))
 }

@@ -1,7 +1,10 @@
 package api
 
-import "net/http"
+import (
+	"blockchain-voting/api/handler"
+	"net/http"
+)
 
-func SetupRoutes() {
-	http.HandleFunc("/vote", VoteHandler)
+func SetupRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("/vote", handler.VoteHandler) // Use the VoteHandler from the handler package
 }
