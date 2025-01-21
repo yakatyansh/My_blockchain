@@ -10,6 +10,7 @@ import (
 
 func main() {
 	// Initialize the blockchain with the genesis block
+	mux := http.NewServeMux()
 	blockchain.InitializeBlockChain()
 
 	// Setup the API routes
