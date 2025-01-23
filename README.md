@@ -1,13 +1,23 @@
-# Golang Blockchain Network
-
-This project is a simple implementation of a blockchain network using Golang. The goal is to understand the fundamental concepts of blockchain technology by building a basic blockchain from scratch.
-
+# Voting System using Golang
 ## Features
 
-- Block creation
-- Proof of Work (PoW) algorithm
-- Blockchain validation
-- Peer-to-peer network
+- Secure and transparent voting system
+- Immutable ledger of votes
+- Peer-to-peer network for decentralized voting
+- Simple API for interacting with the blockchain
+
+## Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+## Built With
+
+- [Golang](https://golang.org/) - The programming language used
+
+## Authors
+
+- **Yash Katyan** - *Initial work* - [yakatyansh](https://github.com/yakatyansh)
+
 
 ## Prerequisites
 
